@@ -36,7 +36,7 @@ class TradeBlotter:
             askval = span.text
             ask = askval.split(" ")
             retval = ask[0].replace(",","")
-            retval = round(float(retval)*random.uniform(0.95, 1.02),3) # temporary arragement to make price seem different
+            retval = round(float(retval)*random.uniform(0.985, 1.01),3) # temporary arragement to make price seem different
             return(str(retval))
         else:
             return(0)
@@ -76,7 +76,7 @@ class TradeBlotter:
             balance = float(df[df['Ticker'] == 'CASH']["Position"])
             TradeBlotter.ShowAvailableCash(self)
             position = float(df[df['Ticker'] == ticker.upper()]["Position"])
-            BuyOrSell = input("Do You want to Buy (1) , Sell (2), Sell to Open (3), Buy to Close (4):")
+            BuyOrSell = input("Do You want to Buy (1) , Sell (2):")
             if(BuyOrSell=="1"):
                 qty = int(input("Enter the quantity you want to buy:"))
                 quote = TradeBlotter.GetQuoteFromYahooFinance(self,ticker,"ASK")
@@ -106,12 +106,14 @@ class TradeBlotter:
                             print("Sell " + str(qty) + " shares of " + ticker + " executed at " + str(quote))
                             TradeBlotter.ShowAvailableCash(self)
                         else:
-                            print("Price unavailable.. please try later.")
+                            print("Price unavailable.. please try later.\n")
+                    else:
+                        print("The available shares of " + str(position) + " is less that your quantity " + str(qty) + ".\n")
 
                 else:
-                    print("You do not have a position in " + ticker + " to sell." )
+                    print("You do not have a position in " + ticker + " to sell.\n" )
             else:
-                print("Invalid Selection. please try again")
+                print("Invalid Selection. please try again\n")
                 TradeBlotter.MakeTrade(self,df)
         else:
             print("***Invalid ticker selection***.")
@@ -167,7 +169,7 @@ class TradeBlotter:
                 df = TradeBlotter.GetPL(self,df)
                 print(df)
             elif(selection == UserOptions.QUIT.value):
-                print("You selected Quit\n")
+                print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
             else:
                 print("Invalid selection Option\n")
@@ -182,7 +184,7 @@ class TradeBlotter:
                 df = TradeBlotter.GetPL(self,df)
                 print(df)
             elif (selection.upper().find("QUIT") != -1):
-                print("You selected Quit\n")
+                print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
             else:
                 print("Invalid selection Option")
@@ -197,5 +199,3 @@ df = t.CreateBlotterDataFrame()
 dflog = t.CreateTradeLogDataFrame()
 t.GetUserSelection(df)
 
-#with open('result.html', 'wb') as f:
-    #f.write(res.content)
