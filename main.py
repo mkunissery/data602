@@ -36,7 +36,7 @@ class TradeBlotter:
             askval = span.text
             ask = askval.split(" ")
             retval = ask[0].replace(",","")
-            retval = round(float(retval)*random.uniform(0.985, 1.01),3) # temporary arragement to make price seem different
+            #retval = round(float(retval)*random.uniform(0.985, 1.01),3) # temporary arragement to make price seem different
             return(str(retval))
         else:
             return(0)
