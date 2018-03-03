@@ -154,7 +154,7 @@ class TradeBlotter:
                 wap = float(row['WAP'])
                 rpl = (swap - wap) * sumofsharessold
                 df.loc[df['Ticker'] == row['Ticker'], 'RPL'] = rpl
-        return (df)
+        return (df[df['Ticker'].isin(tickerlist)])
 
     def GetUserSelection(self, df):
         quitstatus = 0
