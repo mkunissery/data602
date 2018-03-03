@@ -200,9 +200,7 @@ class TradeBlotter:
                 TradeBlotter.GetUserSelection(self, df)
         return
 
-
 t = TradeBlotter()
 df = t.CreateBlotterDataFrame()
 dflog = t.CreateTradeLogDataFrame()
 t.GetUserSelection(df)
-
