@@ -1,0 +1,7 @@
+FROM python:3.6
+WORKDIR /Users/mkunissery/gitclone
+COPY requirements.txt ./
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/mkunissery/data602
+CMD [ "python", "/Users/mkunissery/gitclone/data602/main.py" ]
