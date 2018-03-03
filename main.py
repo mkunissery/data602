@@ -52,12 +52,12 @@ class TradeBlotter:
 
     def CreateBlotterDataFrame(self):
         #df = pd.read_csv("list.csv",",")
-        url = 'https://raw.githubusercontent.com/mkunissery/data602/master/list.csv'
+        url = 'https://raw.githubusercontent.com/mkunissery/data/master/list.csv'
         df = pd.read_csv(url)
         return (df)
 
     def CreateTradeLogDataFrame(self):
-        url = 'https://raw.githubusercontent.com/mkunissery/data602/master/tradelog.csv'
+        url = 'https://raw.githubusercontent.com/mkunissery/data/master/tradelog.csv'
         df = pd.read_csv(url)
         #df = pd.read_csv("tradelog.csv",",")
         return (df)
@@ -126,12 +126,16 @@ class TradeBlotter:
 
 
     def GetPL(self,df):
+        tickerlist = dflog['Ticker'].tolist()
+        test = tickerlist.append('CASH')
         dfwap = dflog[dflog.Type == 'B'].groupby(["Ticker"]).apply(lambda x: np.average(x.Price, weights=x.Qty))
         dfsell = dflog[dflog.Type == 'S'].groupby(["Ticker"]).apply(lambda x: np.average(x.Price, weights=x.Qty))
         for ticker in dfwap.index:
              df.loc[df['Ticker'] == ticker, 'WAP'] = dfwap.loc[ticker]
+             df.loc[df['Ticker'] == ticker, 'UPL'] = 0
+             df.loc[df['Ticker'] == ticker, 'RPL'] = 0
 
-        for index, row in df.iterrows():
+        for index, row in df[df['Ticker'].isin(tickerlist)].iterrows():
             bidprice = t.GetQuoteFromYahooFinance(row['Ticker'],"BID")
             if(row['Ticker'].upper() != "CASH"):
                 df.loc[df['Ticker'] == row['Ticker'], 'Market'] = round(float(bidprice),3)
@@ -150,7 +154,8 @@ class TradeBlotter:
                 wap = float(row['WAP'])
                 rpl = (swap - wap) * sumofsharessold
                 df.loc[df['Ticker'] == row['Ticker'], 'RPL'] = rpl
-        return (df)
+
+        return (df[df['Ticker'].isin(tickerlist)])
 
     def GetUserSelection(self, df):
         quitstatus = 0
@@ -166,8 +171,9 @@ class TradeBlotter:
                 TradeBlotter.GetBlotter(self,df)
             elif(selection == UserOptions.SHOWPL.value):
                 print("you selected P/L\n")
-                df = TradeBlotter.GetPL(self,df)
-                print(df)
+                result = TradeBlotter.GetPL(self,df)
+                result = result.fillna(0)
+                print(result.to_string(index=False))
             elif(selection == UserOptions.QUIT.value):
                 print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
@@ -181,8 +187,9 @@ class TradeBlotter:
                 TradeBlotter.GetBlotter(self,df)
             elif (selection.upper().find("P/L") != -1 or selection.upper().find("PL") != -1):
                 print("you selected P/L\n")
-                df = TradeBlotter.GetPL(self,df)
-                print(df)
+                result = TradeBlotter.GetPL(self,df)
+                result = result.fillna(0)
+                print(result.to_string(index=False))
             elif (selection.upper().find("QUIT") != -1):
                 print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
