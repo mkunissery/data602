@@ -159,7 +159,7 @@ class TradeBlotter:
     def GetUserSelection(self, df):
         quitstatus = 0
         display = "--------------------------------------------------------------"
-        selection = input(display + "\nPlease select from the below options\n"+ display + "\nTrade (1)\nShow Blotter (2)\nShow P/L (3)\nQuit (4)\n" )
+        selection = input(display + "\nPlease select from the below options\n"+ display + "\nTrade (1)\nShow Blotter (2)\nShow P/L (3)\nQuit (4):" )
         try:
             selection = int(selection)
             if(selection == UserOptions.TRADE.value):
@@ -202,6 +202,4 @@ class TradeBlotter:
 t = TradeBlotter()
 df = t.CreateBlotterDataFrame()
 dflog = t.CreateTradeLogDataFrame()
-print(df)
-print(dflog)
 t.GetUserSelection(df)
