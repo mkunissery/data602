@@ -127,7 +127,7 @@ class TradeBlotter:
 
     def GetPL(self,df):
         tickerlist = dflog['Ticker'].tolist()
-        test = tickerlist.append('CASH')
+        tickerlist.append('CASH')
         dfwap = dflog[dflog.Type == 'B'].groupby(["Ticker"]).apply(lambda x: np.average(x.Price, weights=x.Qty))
         dfsell = dflog[dflog.Type == 'S'].groupby(["Ticker"]).apply(lambda x: np.average(x.Price, weights=x.Qty))
         for ticker in dfwap.index:
@@ -154,8 +154,7 @@ class TradeBlotter:
                 wap = float(row['WAP'])
                 rpl = (swap - wap) * sumofsharessold
                 df.loc[df['Ticker'] == row['Ticker'], 'RPL'] = rpl
-
-        return (df[df['Ticker'].isin(tickerlist)])
+        return (df)
 
     def GetUserSelection(self, df):
         quitstatus = 0
@@ -203,4 +202,6 @@ class TradeBlotter:
 t = TradeBlotter()
 df = t.CreateBlotterDataFrame()
 dflog = t.CreateTradeLogDataFrame()
+print(df)
+print(dflog)
 t.GetUserSelection(df)
