@@ -178,7 +178,7 @@ class TradeBlotter:
                 print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
             else:
-                print("Invalid selection Option\n")
+                print("Invalid selection Option.\n")
         except:
             if (selection.upper() == "TRADE"):
                 print("You Selected Trade\n")
@@ -194,7 +194,7 @@ class TradeBlotter:
                 print("You selected Quit\nGoodBye! :)")
                 quitstatus = 1
             else:
-                print("Invalid selection Option")
+                print("Invalid selection Option.\n")
         finally:
             if quitstatus == 0:
                 TradeBlotter.GetUserSelection(self, df)
